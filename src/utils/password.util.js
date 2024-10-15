@@ -2,7 +2,7 @@ const bcrypt = require("bcrypt");
 
 async function hashPassword(password) {
   const salt = await bcrypt.genSalt();
-  return await bcrypt.hash(password, saltRound);
+  return await bcrypt.hash(password, salt);
 }
 
 async function compare(password, hashPassword) {
