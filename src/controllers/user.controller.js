@@ -17,6 +17,34 @@ class UserController {
       });
     }
   }
+
+  async getUserById(req, res) {
+    const userId = request.params.id;
+    try {
+      const user = await userService.getUserById(userId);
+
+      if (user) {
+        res.status(200).json({
+          success: true,
+          status: 200,
+          message: "User retrieved successfully",
+          data: user,
+        });
+      } else {
+        res.status(404).json({
+          success: false,
+          status: 404,
+          message: "User profile not found.",
+        });
+      }
+    } catch (error) {
+      response.status(404).json({
+        success: false,
+        status: 404,
+        message: `User with id ${userId} not found.`,
+      });
+    }
+  }
 }
 
 module.exports = UserController;
