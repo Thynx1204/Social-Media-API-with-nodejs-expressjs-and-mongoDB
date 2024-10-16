@@ -1,0 +1,21 @@
+const Joi = require("joi");
+
+const userValidationSchema = Joi.object({
+  pseudo: Joi.string().min(3).max(55).required().messages({
+    "string.empty": "Le pseudo est obligatoire",
+    "string.min": "Le pseudo doit contenir au moins 3 caractères",
+    "string.max": "Le pseudo ne peut pas dépasser 55 caractères",
+  }),
+
+  email: Joi.string().email().required().messages({
+    "string.email": "L'email doit être une adresse valide",
+    "string.empty": "L'email est obligatoire",
+  }),
+
+  password: Joi.string().min(6).max(1024).required().messages({
+    "string.empty": "Le mot de passe est obligatoire",
+    "string.min": "Le mot de passe doit contenir au moins 6 caractères",
+  }),
+});
+
+module.exports = userValidationSchema;
