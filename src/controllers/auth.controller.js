@@ -1,12 +1,9 @@
 const AuthService = require("../services/auth.service");
-
+const authService = new AuthService();
 class AuthController {
-  constructor() {
-    this.authService = new AuthService();
-  }
   async register(req, res) {
     try {
-      const user = await this.authService.register(req.body);
+      const user = await authService.register(req.body);
       res.status(201).json({
         success: true,
         message: "Successfully registered.",

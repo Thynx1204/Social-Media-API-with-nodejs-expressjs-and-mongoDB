@@ -4,10 +4,10 @@ const { hashPassword } = require("../utils/password.util");
 class AuthService {
   async register(userData) {
     const { pseudo, email, password } = userData;
-    const user = await UserModel.create({
+    const user = await User.create({
       pseudo,
       email,
-      password: hashPassword(password),
+      password: await hashPassword(password),
     });
     return user;
   }
