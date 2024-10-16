@@ -7,3 +7,5 @@ class UserService {
         return users
     }
 }
+
+module.exports = UserService
