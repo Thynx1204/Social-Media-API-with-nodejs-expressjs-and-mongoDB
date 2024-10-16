@@ -38,10 +38,10 @@ class UserController {
         });
       }
     } catch (error) {
-      response.status(404).json({
+      res.status(500).json({
         success: false,
-        status: 404,
-        message: `User with id ${userId} not found.`,
+        status: 500,
+        message: `An error occurred while retrieving user with ID ${userId}.`,
       });
     }
   }
