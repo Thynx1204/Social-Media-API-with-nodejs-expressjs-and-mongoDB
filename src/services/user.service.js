@@ -40,6 +40,20 @@ class UserService {
 
     return user;
   }
+
+  async deleteUser(userId) {
+    if (!ObjectID.isValid(userId)) {
+      throw new Error("Invalid user ID");
+    }
+
+    const user = await User.findByIdAndDelete(userId).select("-password");
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    return user;
+  }
 }
 
 module.exports = UserService;
