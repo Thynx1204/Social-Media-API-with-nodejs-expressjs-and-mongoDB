@@ -32,7 +32,7 @@ class UserService {
       userId,
       { $set: { bio: userBio } },
       { new: true }
-    );
+    ).select("-password");
 
     if (!user) {
       throw new Error("User not found");
