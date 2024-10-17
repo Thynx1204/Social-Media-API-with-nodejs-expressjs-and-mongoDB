@@ -20,6 +20,26 @@ class UserService {
 
     return user;
   }
+
+  async updateUser(userData) {
+    const { userId, userBio } = userData;
+
+    if (!ObjectID.isValid(userId)) {
+      throw new Error("Invalid user ID");
+    }
+
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { $set: { bio: userBio } },
+      { new: true }
+    );
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    return user;
+  }
 }
 
 module.exports = UserService;

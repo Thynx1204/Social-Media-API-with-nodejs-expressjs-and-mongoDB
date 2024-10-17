@@ -19,29 +19,18 @@ class UserController {
   }
 
   async getUserById(req, res) {
-    const userId = request.params.id;
+    const userId = req.params.id;
     try {
       const user = await userService.getUserById(userId);
-
-      if (user) {
-        res.status(200).json({
-          success: true,
-          status: 200,
-          message: "User retrieved successfully",
-          data: user,
-        });
-      } else {
-        res.status(404).json({
-          success: false,
-          status: 404,
-          message: "User profile not found.",
-        });
-      }
+      res.status(200).json({
+        success: true,
+        message: "User retrieved successfully",
+        data: user,
+      });
     } catch (error) {
-      res.status(500).json({
+      res.status(404).json({
         success: false,
-        status: 500,
-        message: `An error occurred while retrieving user with ID ${userId}.`,
+        message: error.message,
       });
     }
   }
