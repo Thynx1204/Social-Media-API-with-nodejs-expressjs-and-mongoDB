@@ -54,6 +54,31 @@ class UserService {
 
     return user;
   }
+
+  async followUser(userId, userIdToFollow) {
+    if (!ObjectID.isValid(userId) || !ObjectID.isValid(userIdToFollow)) {
+      throw new Error("Invalid user ID");
+    }
+
+    const [updatedUser, updatedUserToFollow] = await Promise.all([
+      User.findByIdAndUpdate(
+        userId,
+        { $addToSet: { following: userIdToFollow } },
+        { new: true }
+      ).select("-password"),
+
+      User.findByIdAndUpdate(
+        userIdToFollow,
+        { $addToSet: { followers: userId } },
+        { new: true }
+      ).select("-password"),
+    ]);
+
+    return {
+      updatedUser,
+      updatedUserToFollow,
+    };
+  }
 }
 
 module.exports = UserService;
