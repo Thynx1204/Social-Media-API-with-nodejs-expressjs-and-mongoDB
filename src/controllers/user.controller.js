@@ -90,6 +90,30 @@ class UserController {
       }
     }
   }
+
+  async followUser(req, res) {
+    const userId = req.params.id;
+    const userIdToFollow = req.body.userIdToFollow;
+    try {
+      const [updatedUser, updatedUserToFollow] = await userService.followUser(
+        userId,
+        userIdToFollow
+      );
+      res.status(200).json({
+        success: true,
+        message: "user successfully followed",
+        data: {
+          updatedUser,
+          updatedUserToFollow,
+        },
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: "An unexpected error occurred",
+      });
+    }
+  }
 }
 
 module.exports = UserController;
