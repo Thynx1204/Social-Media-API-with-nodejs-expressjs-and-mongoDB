@@ -101,14 +101,13 @@ class UserController {
       );
       res.status(200).json({
         success: true,
-        message: "user successfully followed",
+        message: "User successfully followed",
         data: {
           updatedUser,
           updatedUserToFollow,
         },
       });
     } catch (error) {
-      console.log(error)
       if (error.message === "Invalid user ID") {
         return res.status(400).json({
           success: false,
@@ -123,7 +122,42 @@ class UserController {
         return res.status(500).json({
           success: false,
           message: "An unexpected error occurred",
-          error: error.message,
+        });
+      }
+    }
+  }
+
+  async unfollowUser(req, res) {
+    const userId = req.params.id;
+    const userIdToUnFollow = req.body.userIdToUnFollow;
+    try {
+      const [updatedUser, updatedUserToUnFollow] = await userService.unFollowUser(
+        userId,
+        userIdToUnFollow
+      );
+      res.status(200).json({
+        success: true,
+        message: "User successfully unfollowed",
+        data: {
+          updatedUser,
+          updatedUserToUnFollow,
+        },
+      });
+    } catch (error) {
+      if (error.message === "Invalid user ID") {
+        return res.status(400).json({
+          success: false,
+          message: error.message,
+        });
+      } else if (error.message === "User not found") {
+        return res.status(404).json({
+          success: false,
+          message: error.message,
+        });
+      } else {
+        return res.status(500).json({
+          success: false,
+          message: "An unexpected error occurred",
         });
       }
     }
