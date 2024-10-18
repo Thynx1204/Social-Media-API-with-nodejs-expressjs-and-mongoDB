@@ -74,6 +74,10 @@ class UserService {
       ).select("-password"),
     ]);
 
+    if (!updatedUser || !updatedUserToFollow) {
+      throw new Error("User not found");
+    }
+
     return {
       updatedUser,
       updatedUserToFollow,

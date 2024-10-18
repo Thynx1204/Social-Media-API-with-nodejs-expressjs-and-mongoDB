@@ -108,10 +108,22 @@ class UserController {
         },
       });
     } catch (error) {
-      res.status(500).json({
-        success: false,
-        message: "An unexpected error occurred",
-      });
+      if (error.message === "Invalid user ID") {
+        return res.status(400).json({
+          success: false,
+          message: error.message,
+        });
+      } else if (error.message === "User not found") {
+        return res.status(404).json({
+          success: false,
+          message: error.message,
+        });
+      } else {
+        return res.status(500).json({
+          success: false,
+          message: "An unexpected error occurred",
+        });
+      }
     }
   }
 }
