@@ -78,6 +78,30 @@ class UserService {
 
     return [updatedUser, updatedUserToFollow];
   }
+
+  async unFollowUser(userId, userIdToUnFollow) {
+    if (!ObjectID.isValid(userId) || !ObjectID.isValid(userIdToUnFollow)) {
+      throw new Error("Invalid user ID");
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { $pull: { following: userIdToUnFollow } },
+      { new: true }
+    ).select("-password");
+
+    const updatedUserToUnFollow = await User.findByIdAndUpdate(
+      userIdToUnFollow,
+      { $pull: { followers: userId } },
+      { new: true }
+    ).select("-password");
+
+    if (!updatedUser || !updatedUserToUnFollow) {
+      throw new Error("User not found");
+    }
+
+    return [updatedUser, updatedUserToUnFollow];
+  }
 }
 
 module.exports = UserService;
