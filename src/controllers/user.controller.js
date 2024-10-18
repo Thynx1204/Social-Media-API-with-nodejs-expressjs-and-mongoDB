@@ -127,7 +127,7 @@ class UserController {
     }
   }
 
-  async unfollowUser(req, res) {
+  async unFollowUser(req, res) {
     const userId = req.params.id;
     const userIdToUnFollow = req.body.userIdToUnFollow;
     try {

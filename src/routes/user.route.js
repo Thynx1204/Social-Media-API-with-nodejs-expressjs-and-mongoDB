@@ -12,4 +12,7 @@ router.delete("/:id", userController.deleteUser);
 
 router.patch("/follow/:id", userController.followUser)
 
+router.patch("/unfollow/:id", userController.unFollowUser)
+
+
 module.exports = router;
