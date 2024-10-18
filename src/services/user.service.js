@@ -60,28 +60,23 @@ class UserService {
       throw new Error("Invalid user ID");
     }
 
-    const [updatedUser, updatedUserToFollow] = await Promise.all([
-      User.findByIdAndUpdate(
-        userId,
-        { $addToSet: { following: userIdToFollow } },
-        { new: true }
-      ).select("-password"),
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { $addToSet: { following: userIdToFollow } },
+      { new: true }
+    ).select("-password");
 
-      User.findByIdAndUpdate(
-        userIdToFollow,
-        { $addToSet: { followers: userId } },
-        { new: true }
-      ).select("-password"),
-    ]);
+    const updatedUserToFollow = await User.findByIdAndUpdate(
+      userIdToFollow,
+      { $addToSet: { followers: userId } },
+      { new: true }
+    ).select("-password");
 
     if (!updatedUser || !updatedUserToFollow) {
       throw new Error("User not found");
     }
 
-    return {
-      updatedUser,
-      updatedUserToFollow,
-    };
+    return [updatedUser, updatedUserToFollow];
   }
 }
 

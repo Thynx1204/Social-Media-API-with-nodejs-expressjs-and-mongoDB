@@ -108,6 +108,7 @@ class UserController {
         },
       });
     } catch (error) {
+      console.log(error)
       if (error.message === "Invalid user ID") {
         return res.status(400).json({
           success: false,
@@ -122,6 +123,7 @@ class UserController {
         return res.status(500).json({
           success: false,
           message: "An unexpected error occurred",
+          error: error.message,
         });
       }
     }
