@@ -10,4 +10,6 @@ router.put("/:id", userController.updateUser);
 
 router.delete("/:id", userController.deleteUser);
 
+router.patch("/follow/:id", userController.followUser)
+
 module.exports = router;
