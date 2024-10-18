@@ -1,5 +1,6 @@
 const User = require("../models/user.model");
-const { hashPassword } = require("../utils/password.util");
+const { hashPassword, compare } = require("../utils/password.util");
+const { generateAccessToken } = require("../utils/jwt.util");
 
 class AuthService {
   async register(userData) {
@@ -23,6 +24,20 @@ class AuthService {
       password: await hashPassword(password),
     });
     return user;
+  }
+
+  async login(userData) {
+    const { email, password } = userData;
+
+    const user = await User.findOne({ email });
+
+    if (!user) throw new Error("incorrect email");
+
+    if (await compare(password, user.password)) {
+      return generateAccessToken(user._id);
+    } else {
+      throw new Error("incorrect password");
+    }
   }
 }
 
