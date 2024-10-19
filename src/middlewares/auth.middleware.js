@@ -11,7 +11,7 @@ function verifyToken(req, res, next) {
     return;
   }
 
-  const token = auth.split(" ")[1];
+  const token = authToken.split(" ")[1];
 
   if (!token) {
     res.status(401).json({
@@ -23,7 +23,7 @@ function verifyToken(req, res, next) {
 
   try {
     const payload = verifyAccessToken(token);
-    req.user = payload._id;
+    req.user = payload.userId;
     next();
   } catch (error) {
     if (error.name === "JsonWebTokenError") {
