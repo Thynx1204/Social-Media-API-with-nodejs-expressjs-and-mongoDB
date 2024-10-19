@@ -3,13 +3,13 @@ require("./config/database");
 require("dotenv").config();
 const authRouter = require("./routes/auth.route");
 const userRouter = require("./routes/user.route");
-const  verifyToken  = require('./middlewares/auth.middleware')
+const { verifyToken } = require("./middlewares/auth.middleware");
 
 const app = express();
 
 app.use(express.json());
 
-app.get("*", verifyToken)
+app.use("*", verifyToken);
 
 app.use("/auth", authRouter);
 

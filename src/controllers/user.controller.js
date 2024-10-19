@@ -37,7 +37,7 @@ class UserController {
 
   async updateUser(req, res) {
     try {
-      const userId = req.params.id;
+      const userId = req.user.id;
       const userBio = req.body.bio;
       const user = await userService.updateUser({ userId, userBio });
 
