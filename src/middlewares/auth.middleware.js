@@ -23,7 +23,7 @@ function verifyToken(req, res, next) {
 
   try {
     const payload = verifyAccessToken(token);
-    req.user = payload.userId;
+    req.user = { id: payload.userId, role: payload.userRole };
     next();
   } catch (error) {
     if (error.name === "JsonWebTokenError") {
@@ -45,4 +45,14 @@ function verifyToken(req, res, next) {
   }
 }
 
-module.exports = verifyToken;
+function isAdmin(req, res, next) {
+  if (req.user.role !== "admin") {
+    return res.status(403).json({
+      success: false,
+      message: "Access denied. Admins only.",
+    });
+  }
+  next();
+}
+
+module.exports = { verifyToken, isAdmin };

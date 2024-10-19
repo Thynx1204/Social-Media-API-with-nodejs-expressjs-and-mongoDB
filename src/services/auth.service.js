@@ -34,7 +34,7 @@ class AuthService {
     if (!user) throw new Error("User not found");
 
     if (await compare(password, user.password)) {
-      return generateAccessToken(user._id);
+      return generateAccessToken(user._id, user.role);
     } else {
       throw new Error("Incorrect password");
     }
