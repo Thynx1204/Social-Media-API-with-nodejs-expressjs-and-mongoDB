@@ -68,6 +68,14 @@ class AuthController {
       }
     }
   }
+
+  async logout (req, res) {
+    res.set('Authorization', '');
+    res.status(200).json({
+      success: true,
+      message: "Successfully logged out.",
+    });
+  }
 }
 
 module.exports = AuthController;
