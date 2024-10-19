@@ -1,10 +1,13 @@
 const AuthService = require("../services/auth.service");
 const authService = new AuthService();
-const userValidationSchema = require("../validation/user.validation");
+const {
+  registerValidationSchema,
+  loginValidationSchema,
+} = require("../validation/user.validation");
 class AuthController {
   async register(req, res) {
     try {
-      const { error } = userValidationSchema.validate(req.body);
+      const { error } = registerValidationSchema.validate(req.body);
 
       if (error) {
         return res.status(400).json({
@@ -29,7 +32,7 @@ class AuthController {
 
   async login(req, res) {
     try {
-      const { error } = userValidationSchema.validate(req.body);
+      const { error } = loginValidationSchema.validate(req.body);
 
       if (error) {
         return res.status(400).json({
@@ -39,10 +42,12 @@ class AuthController {
       }
 
       const token = await authService.login(req.body);
+      //res.header('Authorization', `Bearer ${token}`);
+      res.set("Authorization", `Bearer ${token}`);
       res.status(200).json({
         success: true,
         message: "Successfully authenticated.",
-        data: { token },
+        //data: { token },
       });
     } catch (error) {
       if (error.message === "User not found") {

@@ -25,15 +25,12 @@ const loginValidationSchema = Joi.object({
     .messages({
       "string.email": "L'email doit être une adresse valide",
       "string.empty": "L'email est obligatoire",
-      "any.required": "L'email est requis",
     }),
 
   password: Joi.string()
     .required()
     .messages({
       "string.empty": "Le mot de passe est obligatoire",
-      "string.min": "Le mot de passe doit contenir au moins 6 caractères",
-      "any.required": "Le mot de passe est requis",
     }),
 });
 
