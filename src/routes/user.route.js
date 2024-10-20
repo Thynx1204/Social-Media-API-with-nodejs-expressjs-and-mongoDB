@@ -12,6 +12,8 @@ router.put("/", userController.updateUser);
 
 router.delete("/:id", isAdmin, userController.deleteUser);
 
+router.delete("/", userController.deleteMyProfile);
+
 router.patch("/follow", userController.followUser)
 
 router.patch("/unfollow", userController.unFollowUser)
