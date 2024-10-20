@@ -12,9 +12,9 @@ router.put("/", userController.updateUser);
 
 router.delete("/:id", isAdmin, userController.deleteUser);
 
-router.patch("/follow/:id", userController.followUser)
+router.patch("/follow", userController.followUser)
 
-router.patch("/unfollow/:id", userController.unFollowUser)
+router.patch("/unfollow", userController.unFollowUser)
 
 
 module.exports = router;

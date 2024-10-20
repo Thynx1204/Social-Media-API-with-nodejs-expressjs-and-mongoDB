@@ -9,11 +9,11 @@ const app = express();
 
 app.use(express.json());
 
-app.use("*", verifyToken);
+//app.use("*", verifyToken);
 
 app.use("/auth", authRouter);
 
-app.use("/users", userRouter);
+app.use("/users", verifyToken, userRouter);
 
 app.listen(process.env.PORT, () =>
   console.log(`Server running on http://localhost:${process.env.PORT}`)
