@@ -101,7 +101,7 @@ class PostController {
     }
   }
 
-  async deleteUser(req, res) {
+  async deletePost(req, res) {
     const postId = req.params.id;
 
     try {
