@@ -25,6 +25,20 @@ class PostService {
     const posts = await Post.find();
     return posts;
   }
+
+  async getPostById(postId) {
+    if (!ObjectID.isValid(postId)) {
+      throw new Error("Invalid post ID");
+    }
+
+    const post = await Post.findById(postId);
+
+    if (!post) {
+      throw new Error("Post not found");
+    }
+
+    return user;
+  }
 }
 
 module.exports = PostService;
