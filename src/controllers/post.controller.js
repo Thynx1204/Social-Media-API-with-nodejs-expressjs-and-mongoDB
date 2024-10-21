@@ -1,10 +1,9 @@
 const PostService = require("../services/post.service");
 const postService = new PostService();
-const postValidationSchema = require('../validation/post.validation')
+const postValidationSchema = require("../validation/post.validation");
 
 class PostController {
   async createPost(req, res) {
-    
     const { error } = postValidationSchema.validate(req.body);
 
     if (error) {
@@ -73,7 +72,25 @@ class PostController {
       res.status(200).json({
         success: true,
         message: "Post retrieved successfully",
-        data: user,
+        data: post,
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: "An unexpected error occurs",
+      });
+    }
+  }
+
+  async getUserPosts(req, res) {
+    const postId = req.params.id;
+
+    try {
+      const post = await postService.getUserPosts(postId);
+      res.status(200).json({
+        success: true,
+        message: "Posts retrieved successfully",
+        data: post,
       });
     } catch (error) {
       res.status(500).json({
