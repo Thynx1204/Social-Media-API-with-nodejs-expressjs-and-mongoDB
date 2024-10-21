@@ -4,7 +4,7 @@ const ObjectID = require("mongoose").Types.ObjectId;
 class PostService {
   async createPost(postData) {
     const { posterId, message, picture, video, likers, comments } = postData;
-    
+
     if (!ObjectID.isValid(posterId)) {
       throw new Error("Invalid user ID");
     }
@@ -19,6 +19,11 @@ class PostService {
     });
 
     return post;
+  }
+
+  async getAllPosts() {
+    const posts = await Post.find();
+    return posts;
   }
 }
 
