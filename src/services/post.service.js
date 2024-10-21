@@ -39,6 +39,11 @@ class PostService {
 
     return user;
   }
+
+  async getUserPosts(userId) {
+    const posts = await Post.find({ posterId: userId });
+    return posts;
+  }
 }
 
 module.exports = PostService;
