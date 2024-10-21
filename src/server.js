@@ -16,7 +16,7 @@ app.use("/auth", authRouter);
 
 app.use("/users", verifyToken, userRouter);
 
-app.use("post", verifyToken, postRouter);
+app.use("/post", verifyToken, postRouter);
 
 app.listen(process.env.PORT, () =>
   console.log(`Server running on http://localhost:${process.env.PORT}`)
