@@ -100,6 +100,37 @@ class PostController {
       });
     }
   }
+
+  async deleteUser(req, res) {
+    const postId = req.params.id;
+
+    try {
+      const post = await postService.deletePost(postId);
+
+      res.status(200).json({
+        success: true,
+        message: "Post deleted successfully",
+        data: post,
+      });
+    } catch (error) {
+      if (error.message === "Invalid post ID") {
+        return res.status(400).json({
+          success: false,
+          message: error.message,
+        });
+      } else if (error.message === "Post not found") {
+        return res.status(404).json({
+          success: false,
+          message: error.message,
+        });
+      } else {
+        return res.status(500).json({
+          success: false,
+          message: "An unexpected error occurs",
+        });
+      }
+    }
+  }
 }
 
 module.exports = PostController;
