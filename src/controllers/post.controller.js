@@ -49,7 +49,39 @@ class PostController {
     }
   }
 
-  
+  async getAllPosts(req, res) {
+    try {
+      const posts = await postService.getAllPosts();
+      res.status(200).json({
+        success: true,
+        message: "Posts retrieved successfully.",
+        data: posts,
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: "An unexpected error occurs",
+      });
+    }
+  }
+
+  async getAllById(req, res) {
+    const postId = req.params.id;
+
+    try {
+      const post = await postService.getPostById(postId);
+      res.status(200).json({
+        success: true,
+        message: "Post retrieved successfully",
+        data: user,
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: "An unexpected error occurs",
+      });
+    }
+  }
 }
 
 module.exports = PostController;
