@@ -4,7 +4,7 @@ const postService = new PostService();
 class PostController {
   async createPost(req, res) {
     const posterId = req.user.id;
-    const {message, video} = req.body;
+    const { message, video } = req.body;
     const picture = "";
     const likers = [];
     const comments = [];
@@ -38,3 +38,5 @@ class PostController {
     }
   }
 }
+
+module.exports = PostController;
