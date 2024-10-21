@@ -45,19 +45,25 @@ class PostService {
     return posts;
   }
 
-  async deletePost(postId) {
+  async deletePost(postId, userId) {
     if (!ObjectID.isValid(postId)) {
       throw new Error("Invalid post ID");
     }
-
-    const post = await Post.findByIdAndDelete(postId);
-
+  
+    const post = await Post.findById(postId);
+    
     if (!post) {
       throw new Error("Post not found");
     }
-
+  
+    if (post.posterId !== userId) {
+      throw new Error("You are not authorized to delete this post");
+    }
+    await post.remove();
+  
     return post;
   }
+  
 }
 
 module.exports = PostService;
