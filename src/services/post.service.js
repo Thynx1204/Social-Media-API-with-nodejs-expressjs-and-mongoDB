@@ -37,12 +37,26 @@ class PostService {
       throw new Error("Post not found");
     }
 
-    return user;
+    return post;
   }
 
   async getUserPosts(userId) {
     const posts = await Post.find({ posterId: userId });
     return posts;
+  }
+
+  async deletePost(postId) {
+    if (!ObjectID.isValid(postId)) {
+      throw new Error("Invalid post ID");
+    }
+
+    const post = await Post.findByIdAndDelete(postId);
+
+    if (!post) {
+      throw new Error("Post not found");
+    }
+
+    return post;
   }
 }
 

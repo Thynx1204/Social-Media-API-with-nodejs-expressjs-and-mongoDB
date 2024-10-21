@@ -64,7 +64,7 @@ class PostController {
     }
   }
 
-  async getAllById(req, res) {
+  async getPostById(req, res) {
     const postId = req.params.id;
 
     try {
@@ -75,6 +75,7 @@ class PostController {
         data: post,
       });
     } catch (error) {
+      console.log(error)
       res.status(500).json({
         success: false,
         message: "An unexpected error occurs",
