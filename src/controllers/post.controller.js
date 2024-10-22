@@ -112,8 +112,8 @@ class PostController {
 
       res.status(200).json({
         success: true,
-        message: "User edit successfully",
-        data: user,
+        message: "Post edit successfully",
+        data: updatedPost,
       });
     } catch (error) {
       console.log(error);

@@ -67,7 +67,7 @@ class PostService {
       { $set: { message } },
       { new: true }
     );
-  
+
     return updatedPost;
   }
 
@@ -88,6 +88,26 @@ class PostService {
     await post.deleteOne();
 
     return post;
+  }
+
+  async likePost(userId, postId) {
+    if (!ObjectID.isValid(postId)) {
+      throw new Error("Post not found");
+    }
+
+    const post = await Post.findById(postId);
+  
+    if (!post) {
+      throw new Error("Post not found");
+    }
+  
+    const updatedPost = await Post.findByIdAndUpdate(
+      postId,
+      { $addToSet: { likers: userId } },
+      { new: true }
+    );
+  
+    return updatedPost;
   }
 }
 
