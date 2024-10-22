@@ -109,6 +109,30 @@ class PostService {
   
     return updatedPost;
   }
+
+  async unLikePost(userId, postId) {
+    if (!ObjectID.isValid(postId)) {
+      throw new Error("Invalid post ID");
+    }
+
+    const post = await Post.findById(postId);
+  
+    if (!post) {
+      throw new Error("Post not found");
+    }
+
+    if (!post.likers.includes(userId)) {
+      throw new Error("User has not liked this post");
+    }
+  
+    const updatedPost = await Post.findByIdAndUpdate(
+      postId,
+      { $pull: { likers: userId } },
+      { new: true }
+    );
+  
+    return updatedPost;
+  }
 }
 
 module.exports = PostService;
