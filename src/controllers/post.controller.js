@@ -75,7 +75,7 @@ class PostController {
         data: post,
       });
     } catch (error) {
-      console.log(error)
+      console.log(error);
       res.status(500).json({
         success: false,
         message: "An unexpected error occurs",
@@ -103,9 +103,10 @@ class PostController {
 
   async deletePost(req, res) {
     const postId = req.params.id;
+    const userId = req.user.id;
 
     try {
-      const post = await postService.deletePost(postId);
+      const post = await postService.deletePost(postId, userId);
 
       res.status(200).json({
         success: true,
@@ -120,6 +121,11 @@ class PostController {
         });
       } else if (error.message === "Post not found") {
         return res.status(404).json({
+          success: false,
+          message: error.message,
+        });
+      } else if (error.message === "You are not authorized to delete this post") {
+        return res.status(403).json({
           success: false,
           message: error.message,
         });
