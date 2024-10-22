@@ -102,7 +102,9 @@ class PostController {
   }
 
   async updatePost(req, res) {
-    const postData = req.body;
+    const postId = req.params.id;
+    const message = req.body.message;
+    const postData = {postId, message}
     const userId = req.user.id;
 
     try {
