@@ -214,6 +214,44 @@ class PostController {
       }
     }
   }
+
+  async unLikePost(req, res) {
+    const userId = req.user.id;
+    const posterId = req.params.id;
+
+    try {
+      const updatedPost = await postService.unLikePost(userId, posterId);
+
+      res.status(200).json({
+        success: true,
+        message: "Post is successfully unliked",
+        data: updatedPost,
+      });
+    } catch (error) {
+      console.log(error);
+      if (error.message === "Invalid post ID") {
+        return res.status(400).json({
+          success: false,
+          message: error.message,
+        });
+      } else if (error.message === "Post not found") {
+        return res.status(404).json({
+          success: false,
+          message: error.message,
+        });
+      } else if (error.message === "User has not liked this post") {
+        return res.status(403).json({
+          success: false,
+          message: error.message,
+        });
+      } else {
+        return res.status(500).json({
+          success: false,
+          message: "An unexpected error occurs",
+        });
+      }
+    }
+  }
 }
 
 module.exports = PostController;
