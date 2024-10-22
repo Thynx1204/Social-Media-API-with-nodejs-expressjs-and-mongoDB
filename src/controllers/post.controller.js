@@ -101,6 +101,46 @@ class PostController {
     }
   }
 
+  async updatePost(req, res) {
+    const postData = req.body;
+    const userId = req.user.id;
+
+    try {
+      const updatedPost = await postService.updatePost(postData, userId);
+
+      res.status(200).json({
+        success: true,
+        message: "User edit successfully",
+        data: user,
+      });
+    } catch (error) {
+      console.log(error);
+      if (error.message === "Invalid post ID") {
+        return res.status(400).json({
+          success: false,
+          message: error.message,
+        });
+      } else if (error.message === "Post not found") {
+        return res.status(404).json({
+          success: false,
+          message: error.message,
+        });
+      } else if (
+        error.message === "You are not authorized to update this post"
+      ) {
+        return res.status(403).json({
+          success: false,
+          message: error.message,
+        });
+      } else {
+        return res.status(500).json({
+          success: false,
+          message: "An unexpected error occurs",
+        });
+      }
+    }
+  }
+
   async deletePost(req, res) {
     const postId = req.params.id;
     const userId = req.user.id;
@@ -114,7 +154,6 @@ class PostController {
         data: post,
       });
     } catch (error) {
-      console.log(error)
       if (error.message === "Invalid post ID") {
         return res.status(400).json({
           success: false,
@@ -125,7 +164,9 @@ class PostController {
           success: false,
           message: error.message,
         });
-      } else if (error.message === "You are not authorized to delete this post") {
+      } else if (
+        error.message === "You are not authorized to delete this post"
+      ) {
         return res.status(403).json({
           success: false,
           message: error.message,
