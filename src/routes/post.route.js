@@ -12,8 +12,10 @@ router.get("/user/:id", postController.getUserPosts);
 
 router.put("/:id", postController.updatePost);
 
-router.delete("/:id", postController.deletePost)
+router.delete("/:id", postController.deletePost);
 
-router.patch("/like/:id", postController.likePost)
+router.patch("/like/:id", postController.likePost);
+
+router.patch("/unlike/:id", postController.unLikePost);
 
 module.exports = router;
