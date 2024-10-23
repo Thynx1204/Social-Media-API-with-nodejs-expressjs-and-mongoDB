@@ -97,11 +97,11 @@ class PostService {
     }
 
     const post = await Post.findById(postId);
-  
+
     if (!post) {
       throw new Error("Post not found");
     }
-  
+
     const updatedPost = await Post.findByIdAndUpdate(
       postId,
       { $addToSet: { likers: userId } },
@@ -113,7 +113,7 @@ class PostService {
       { $addToSet: { likes: postId } },
       { new: true }
     );
-  
+
     return updatedPost;
   }
 
@@ -123,7 +123,7 @@ class PostService {
     }
 
     const post = await Post.findById(postId);
-  
+
     if (!post) {
       throw new Error("Post not found");
     }
@@ -131,16 +131,48 @@ class PostService {
     if (!post.likers.includes(userId)) {
       throw new Error("User has not liked this post");
     }
-  
+
     const updatedPost = await Post.findByIdAndUpdate(
       postId,
       { $pull: { likers: userId } },
       { new: true }
     );
-    
+
     await User.findByIdAndUpdate(
       userId,
       { $pull: { likes: postId } },
+      { new: true }
+    );
+
+    return updatedPost;
+  }
+
+  async commentPost(userId, postData) {
+    const { postId, text } = postData;
+    const user = await User.findById(userId);
+
+    if (!ObjectID.isValid(postId)) {
+      throw new Error("Invalid post ID");
+    }
+
+    const post = await Post.findById(postId);
+
+    if (!post) {
+      throw new Error("Post not found");
+    }
+
+    const updatedPost = await Post.findByIdAndUpdate(
+      postId,
+      {
+        $push: {
+          comments: {
+            commenterId: user._id,
+            commenterPseudo: user.pseudo,
+            text,
+            timestamp: new Date().getTime(),
+          },
+        },
+      },
       { new: true }
     );
 
