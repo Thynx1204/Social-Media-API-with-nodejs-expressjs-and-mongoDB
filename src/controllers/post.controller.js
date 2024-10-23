@@ -250,6 +250,40 @@ class PostController {
       }
     }
   }
+
+  async commentPost(req, res) {
+    const userId = req.user.id;
+    const postId = req.params.id;
+    const text = req.body.text;
+    const postData = { postId, text };
+
+    try {
+      const updatedPost = await postService.commentPost(userId, postData);
+
+      res.status(200).json({
+        success: true,
+        message: "Comment saved successfully",
+        data: updatedPost,
+      });
+    } catch (error) {
+      if (error.message === "Invalid post ID") {
+        return res.status(400).json({
+          success: false,
+          message: error.message,
+        });
+      } else if (error.message === "Post not found") {
+        return res.status(404).json({
+          success: false,
+          message: error.message,
+        });
+      } else {
+        return res.status(500).json({
+          success: false,
+          message: "An unexpected error occurs",
+        });
+      }
+    }
+  }
 }
 
 module.exports = PostController;
