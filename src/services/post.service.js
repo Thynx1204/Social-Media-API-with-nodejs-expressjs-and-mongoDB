@@ -1,4 +1,5 @@
 const Post = require("../models/post.model");
+const User = require("../models/user.model");
 const ObjectID = require("mongoose").Types.ObjectId;
 
 class PostService {
@@ -104,6 +105,12 @@ class PostService {
     const updatedPost = await Post.findByIdAndUpdate(
       postId,
       { $addToSet: { likers: userId } },
+      { new: true }
+    );
+
+    await User.findByIdAndUpdate(
+      userId,
+      { $addToSet: { likes: postId } },
       { new: true }
     );
   

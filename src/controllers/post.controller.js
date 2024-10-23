@@ -195,7 +195,6 @@ class PostController {
         data: updatedPost,
       });
     } catch (error) {
-      console.log(error);
       if (error.message === "Invalid post ID") {
         return res.status(400).json({
           success: false,
@@ -228,7 +227,6 @@ class PostController {
         data: updatedPost,
       });
     } catch (error) {
-      console.log(error);
       if (error.message === "Invalid post ID") {
         return res.status(400).json({
           success: false,
