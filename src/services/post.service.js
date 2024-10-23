@@ -137,7 +137,13 @@ class PostService {
       { $pull: { likers: userId } },
       { new: true }
     );
-  
+    
+    await User.findByIdAndUpdate(
+      userId,
+      { $pull: { likes: postId } },
+      { new: true }
+    );
+
     return updatedPost;
   }
 }
