@@ -178,6 +178,40 @@ class PostService {
 
     return updatedPost;
   }
+
+  async editCommentPost(userId, postData) {
+    const { postId, text } = postData;
+    const user = await User.findById(userId);
+
+    if (!ObjectID.isValid(postId)) {
+      throw new Error("Invalid post ID");
+    }
+
+    const post = await Post.findById(postId);
+
+    if (!post) {
+      throw new Error("Post not found");
+    }
+
+    if (post.comments.commenterId !== user.id) {
+      throw new Error("You are not authorized to edit this comment");
+    }
+
+    const updatedPost = await Post.findByIdAndUpdate(
+      postId,
+      {
+        $set: {
+          comments: {
+            text,
+            timestamp: new Date().getTime(),
+          },
+        },
+      },
+      { new: true }
+    );
+
+    return updatedPost;
+  }
 }
 
 module.exports = PostService;
