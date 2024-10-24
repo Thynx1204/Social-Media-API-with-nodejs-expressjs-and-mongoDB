@@ -1,20 +1,15 @@
 const UserService = require("../services/user.service");
 const userService = new UserService();
+const jsonResponse = require("../utils/jsonResponse");
 
 class UserController {
   async getAllUsers(req, res) {
     try {
       const users = await userService.getAllUsers();
-      res.status(200).json({
-        success: true,
-        message: "Users retrieved successfully.",
-        data: users,
-      });
+
+      res.status(200).json(jsonResponse(true, "Users retrieved successfully.", users));
     } catch (error) {
-      res.status(500).json({
-        success: false,
-        message: "An unexpected error occurs",
-      });
+      res.status(500).json(jsonResponse(false, "An unexpected error occurs"));
     }
   }
 
@@ -22,71 +17,45 @@ class UserController {
     const userId = req.params.id;
     try {
       const user = await userService.getUserById(userId);
-      res.status(200).json({
-        success: true,
-        message: "User retrieved successfully",
-        data: user,
-      });
+
+      res.status(200).json(jsonResponse(true, "User retrieved successfully.", user));
     } catch (error) {
-      res.status(404).json({
-        success: false,
-        message: error.message,
-      });
+      res.status(404).json(jsonResponse(false, error.message));
     }
   }
 
   async updateUser(req, res) {
+    const userId = req.user.id;
+    const userBio = req.body.bio;
     try {
-      const userId = req.user.id;
-      const userBio = req.body.bio;
       const user = await userService.updateUser({ userId, userBio });
 
-      res.status(200).json({
-        success: true,
-        message: "User edit successfully",
-        data: user,
-      });
+      res.status(200).json(jsonResponse(true, "User edit successfully.", user));
     } catch (error) {
       if (error.message === "Invalid user ID") {
-        return res.status(400).json({
-          success: false,
-          message: error.message,
-        });
+        res.status(400).json(jsonResponse(false, error.message));
+      } else if (error.message === "User not found") {
+        res.status(404).json(jsonResponse(false, error.message));
+      } else {
+        res.status(500).json(jsonResponse(false, "An unexpected error occurred"));
       }
-
-      res.status(404).json({
-        success: false,
-        message: error.message,
-      });
     }
   }
 
   async deleteUser(req, res) {
+    const userId = req.params.id;
+
     try {
-      const userId = req.params.id;
       const user = await userService.deleteUser(userId);
 
-      res.status(200).json({
-        success: true,
-        message: "User deleted successfully",
-        data: user,
-      });
+      res.status(200).json(jsonResponse(true, "User deleted successfully", user));
     } catch (error) {
       if (error.message === "Invalid user ID") {
-        return res.status(400).json({
-          success: false,
-          message: error.message,
-        });
+        res.status(400).json(jsonResponse(false, error.message));
       } else if (error.message === "User not found") {
-        return res.status(404).json({
-          success: false,
-          message: error.message,
-        });
+        res.status(404).json(jsonResponse(false, error.message));
       } else {
-        return res.status(500).json({
-          success: false,
-          message: "An unexpected error occurs",
-        });
+        res.status(500).json(jsonResponse(false, "An unexpected error occurred"));
       }
     }
   }
@@ -99,30 +68,15 @@ class UserController {
         userId,
         userIdToFollow
       );
-      res.status(200).json({
-        success: true,
-        message: "User successfully followed",
-        data: {
-          updatedUser,
-          updatedUserToFollow,
-        },
-      });
+
+      res.status(200).json(jsonResponse(true, "User successfully followed", { updatedUser, updatedUserToFollow }));
     } catch (error) {
       if (error.message === "Invalid user ID") {
-        return res.status(400).json({
-          success: false,
-          message: error.message,
-        });
+        res.status(400).json(jsonResponse(false, error.message));
       } else if (error.message === "User not found") {
-        return res.status(404).json({
-          success: false,
-          message: error.message,
-        });
+        res.status(404).json(jsonResponse(false, error.message));
       } else {
-        return res.status(500).json({
-          success: false,
-          message: "An unexpected error occurred",
-        });
+        res.status(500).json(jsonResponse(false, "An unexpected error occurred"));
       }
     }
   }
@@ -135,30 +89,15 @@ class UserController {
         userId,
         userIdToUnFollow
       );
-      res.status(200).json({
-        success: true,
-        message: "User successfully unfollowed",
-        data: {
-          updatedUser,
-          updatedUserToUnFollow,
-        },
-      });
+
+      res.status(200).json(jsonResponse(true, "User successfully followed", { updatedUser, updatedUserToUnFollow }));
     } catch (error) {
       if (error.message === "Invalid user ID") {
-        return res.status(400).json({
-          success: false,
-          message: error.message,
-        });
+        res.status(400).json(jsonResponse(false, error.message));
       } else if (error.message === "User not found") {
-        return res.status(404).json({
-          success: false,
-          message: error.message,
-        });
+        res.status(404).json(jsonResponse(false, error.message));
       } else {
-        return res.status(500).json({
-          success: false,
-          message: "An unexpected error occurred",
-        });
+        res.status(500).json(jsonResponse(false, "An unexpected error occurred"));
       }
     }
   }
@@ -168,27 +107,14 @@ class UserController {
       const userId = req.user.id;
       const user = await userService.deleteUser(userId);
 
-      res.status(200).json({
-        success: true,
-        message: "User deleted successfully",
-        data: user,
-      });
+      res.status(200).json(jsonResponse(true, "User successfully followed", { updatedUser, updatedUserToUnFollow }));
     } catch (error) {
       if (error.message === "Invalid user ID") {
-        return res.status(400).json({
-          success: false,
-          message: error.message,
-        });
+        res.status(400).json(jsonResponse(false, error.message));
       } else if (error.message === "User not found") {
-        return res.status(404).json({
-          success: false,
-          message: error.message,
-        });
+        res.status(404).json(jsonResponse(false, error.message));
       } else {
-        return res.status(500).json({
-          success: false,
-          message: "An unexpected error occurs",
-        });
+        res.status(500).json(jsonResponse(false, "An unexpected error occurred"));
       }
     }
   }
