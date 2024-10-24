@@ -8,10 +8,7 @@ class PostController {
     const { error } = postValidationSchema.validate(req.body);
 
     if (error) {
-      return res.status(400).json({
-        success: false,
-        message: error.details[0].message,
-      });
+      res.status(400).json(jsonResponse(false, error.details[0].message));
     }
 
     const posterId = req.user.id;
@@ -29,39 +26,18 @@ class PostController {
         likers,
         comments,
       });
-      res.status(201).json({
-        success: true,
-        message: "Post created successfully",
-        data: post,
-      });
+      res.status(201).json(jsonResponse(true, "Post created successfully", post));
     } catch (error) {
-      if (error.message === "Invalid user ID") {
-        return res.status(400).json({
-          success: false,
-          message: error.message,
-        });
-      } else {
-        return res.status(500).json({
-          success: false,
-          message: "An unexpected error occurred",
-        });
-      }
+      res.status(400).json(jsonResponse(false, error.message));
     }
   }
 
   async getAllPosts(req, res) {
     try {
       const posts = await postService.getAllPosts();
-      res.status(200).json({
-        success: true,
-        message: "Posts retrieved successfully.",
-        data: posts,
-      });
+      res.status(200).json(jsonResponse(true, "Posts retrieved successfully.", posts));
     } catch (error) {
-      res.status(500).json({
-        success: false,
-        message: "An unexpected error occurs",
-      });
+      res.status(500).json(jsonResponse(false, "An unexpected error occurs"));
     }
   }
 
@@ -70,17 +46,9 @@ class PostController {
 
     try {
       const post = await postService.getPostById(postId);
-      res.status(200).json({
-        success: true,
-        message: "Post retrieved successfully",
-        data: post,
-      });
+      res.status(200).json(jsonResponse(true, "Posts retrieved successfully.", post));
     } catch (error) {
-      console.log(error);
-      res.status(500).json({
-        success: false,
-        message: "An unexpected error occurs",
-      });
+      res.status(500).json(jsonResponse(false, "An unexpected error occurs"));
     }
   }
 
@@ -88,17 +56,10 @@ class PostController {
     const postId = req.params.id;
 
     try {
-      const post = await postService.getUserPosts(postId);
-      res.status(200).json({
-        success: true,
-        message: "Posts retrieved successfully",
-        data: post,
-      });
+      const posts = await postService.getUserPosts(postId);
+      res.status(200).json(jsonResponse(true, "Posts retrieved successfully.", posts));
     } catch (error) {
-      res.status(500).json({
-        success: false,
-        message: "An unexpected error occurs",
-      });
+      res.status(500).json(jsonResponse(false, "An unexpected error occurs"));
     }
   }
 
@@ -110,36 +71,18 @@ class PostController {
 
     try {
       const updatedPost = await postService.updatePost(postData, userId);
-
-      res.status(200).json({
-        success: true,
-        message: "Post edit successfully",
-        data: updatedPost,
-      });
+      res.status(200).json(jsonResponse(true, "Post edit successfully", updatedPost));
     } catch (error) {
-      console.log(error);
       if (error.message === "Invalid post ID") {
-        return res.status(400).json({
-          success: false,
-          message: error.message,
-        });
+        res.status(400).json(jsonResponse(false, error.message));
       } else if (error.message === "Post not found") {
-        return res.status(404).json({
-          success: false,
-          message: error.message,
-        });
+        res.status(404).json(jsonResponse(false, error.message));
       } else if (
         error.message === "You are not authorized to update this post"
       ) {
-        return res.status(403).json({
-          success: false,
-          message: error.message,
-        });
+        res.status(403).json(jsonResponse(false, error.message));
       } else {
-        return res.status(500).json({
-          success: false,
-          message: "An unexpected error occurs",
-        });
+        res.status(500).json(jsonResponse(false, "An unexpected error occurs"));
       }
     }
   }
@@ -150,35 +93,18 @@ class PostController {
 
     try {
       const post = await postService.deletePost(postId, userId);
-
-      res.status(200).json({
-        success: true,
-        message: "Post deleted successfully",
-        data: post,
-      });
+      res.status(200).json(jsonResponse(true, "Post deleted successfully", post));
     } catch (error) {
       if (error.message === "Invalid post ID") {
-        return res.status(400).json({
-          success: false,
-          message: error.message,
-        });
+        res.status(400).json(jsonResponse(false, error.message));
       } else if (error.message === "Post not found") {
-        return res.status(404).json({
-          success: false,
-          message: error.message,
-        });
+        res.status(404).json(jsonResponse(false, error.message));
       } else if (
         error.message === "You are not authorized to delete this post"
       ) {
-        return res.status(403).json({
-          success: false,
-          message: error.message,
-        });
+        res.status(403).json(jsonResponse(false, error.message));
       } else {
-        return res.status(500).json({
-          success: false,
-          message: "An unexpected error occurs",
-        });
+        res.status(500).json(jsonResponse(false, "An unexpected error occurs"));
       }
     }
   }
@@ -189,28 +115,14 @@ class PostController {
 
     try {
       const updatedPost = await postService.likePost(userId, posterId);
-
-      res.status(200).json({
-        success: true,
-        message: "Post liked successfully",
-        data: updatedPost,
-      });
+      res.status(200).json(jsonResponse(true, "Post liked successfully", updatedPost));
     } catch (error) {
       if (error.message === "Invalid post ID") {
-        return res.status(400).json({
-          success: false,
-          message: error.message,
-        });
+        res.status(400).json(jsonResponse(false, error.message));
       } else if (error.message === "Post not found") {
-        return res.status(404).json({
-          success: false,
-          message: error.message,
-        });
+        res.status(404).json(jsonResponse(false, error.message));
       } else {
-        return res.status(500).json({
-          success: false,
-          message: "An unexpected error occurs",
-        });
+        res.status(500).json(jsonResponse(false, "An unexpected error occurs"));
       }
     }
   }
@@ -221,33 +133,16 @@ class PostController {
 
     try {
       const updatedPost = await postService.unLikePost(userId, posterId);
-
-      res.status(200).json({
-        success: true,
-        message: "Post is successfully unliked",
-        data: updatedPost,
-      });
+      res.status(200).json(jsonResponse(true, "Post is successfully unliked", updatedPost));
     } catch (error) {
       if (error.message === "Invalid post ID") {
-        return res.status(400).json({
-          success: false,
-          message: error.message,
-        });
+        res.status(400).json(jsonResponse(false, error.message));
       } else if (error.message === "Post not found") {
-        return res.status(404).json({
-          success: false,
-          message: error.message,
-        });
+        res.status(404).json(jsonResponse(false, error.message));
       } else if (error.message === "User has not liked this post") {
-        return res.status(403).json({
-          success: false,
-          message: error.message,
-        });
+        res.status(403).json(jsonResponse(false, error.message));
       } else {
-        return res.status(500).json({
-          success: false,
-          message: "An unexpected error occurs",
-        });
+        res.status(500).json(jsonResponse(false, "An unexpected error occurs"));
       }
     }
   }
@@ -260,30 +155,14 @@ class PostController {
 
     try {
       const updatedPost = await postService.commentPost(userId, postData);
-
-      /* res.status(201).json({
-        success: true,
-        message: "Comment saved successfully",
-        data: updatedPost,
-      }); */
-
-      // res.status(201).json(jsonResponse(true, "Comment saved successfully", updatedPost));
+      res.status(201).json(jsonResponse(true, "Comment saved successfully", updatedPost));
     } catch (error) {
       if (error.message === "Invalid post ID") {
-        return res.status(400).json({
-          success: false,
-          message: error.message,
-        });
+        res.status(400).json(jsonResponse(false, error.message));
       } else if (error.message === "Post not found") {
-        return res.status(404).json({
-          success: false,
-          message: error.message,
-        });
+        res.status(404).json(jsonResponse(false, error.message));
       } else {
-        return res.status(500).json({
-          success: false,
-          message: "An unexpected error occurs",
-        });
+        res.status(500).json(jsonResponse(false, "An unexpected error occurs"));
       }
     }
   }

@@ -107,7 +107,7 @@ class UserController {
       const userId = req.user.id;
       const user = await userService.deleteUser(userId);
 
-      res.status(200).json(jsonResponse(true, "User successfully followed", { updatedUser, updatedUserToUnFollow }));
+      res.status(200).json(jsonResponse(true, "User deleted successfully", user));
     } catch (error) {
       if (error.message === "Invalid user ID") {
         res.status(400).json(jsonResponse(false, error.message));
