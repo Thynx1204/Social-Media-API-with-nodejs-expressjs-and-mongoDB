@@ -22,4 +22,6 @@ router.post("/:id/comment", postController.commentPost);
 
 router.put("/:postId/comment/:commentId", postController.editCommentPost);
 
+router.delete("/:postId/comment/:commentId", postController.deleteCommentPost);
+
 module.exports = router;
