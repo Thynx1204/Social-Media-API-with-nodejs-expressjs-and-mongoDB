@@ -1,6 +1,7 @@
 const PostService = require("../services/post.service");
 const postService = new PostService();
 const postValidationSchema = require("../validation/post.validation");
+const jsonResponse = require("../utils/jsonResponse");
 
 class PostController {
   async createPost(req, res) {
@@ -260,11 +261,13 @@ class PostController {
     try {
       const updatedPost = await postService.commentPost(userId, postData);
 
-      res.status(200).json({
+      /* res.status(201).json({
         success: true,
         message: "Comment saved successfully",
         data: updatedPost,
-      });
+      }); */
+
+      // res.status(201).json(jsonResponse(true, "Comment saved successfully", updatedPost));
     } catch (error) {
       if (error.message === "Invalid post ID") {
         return res.status(400).json({
