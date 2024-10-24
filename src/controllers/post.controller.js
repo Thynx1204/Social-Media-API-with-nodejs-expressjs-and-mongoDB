@@ -182,7 +182,7 @@ class PostController {
 
     try {
       const updatedPost = await postService.editCommentPost(userId, postData);
-      res.status(201).json(jsonResponse(true, "Comment saved successfully", updatedPost));
+      res.status(200).json(jsonResponse(true, "Comment edit successfully", updatedPost));
     } catch (error) {
       if (error.message === "Invalid post ID") {
         res.status(400).json(jsonResponse(false, error.message));

@@ -206,6 +206,33 @@ class PostService {
     return post;
   }
   
+  async deleteCommentPost(userId, postData) {
+    const { postId, commentId } = postData;
+  
+    if (!ObjectID.isValid(postId)) throw new Error("Invalid post ID");
+
+    if (!ObjectID.isValid(commentId)) throw new Error("Invalid comment ID");
+  
+    const post = await Post.findById(postId);
+  
+    if (!post) throw new Error("Post not found");
+  
+    const comment = post.comments.find(
+      (comment) => comment._id.toString() === commentId
+    );
+    
+    if (!comment) {
+      throw new Error("Comment not found");
+    }
+    
+    if (comment.commenterId.toString() !== userId) {
+      throw new Error("You are not authorized to detete this comment");
+    }
+  
+    await post.deleteOne();
+  
+    return post;
+  }
 }
 
 module.exports = PostService;

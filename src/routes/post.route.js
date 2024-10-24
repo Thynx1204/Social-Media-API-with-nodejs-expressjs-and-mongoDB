@@ -20,6 +20,6 @@ router.patch("/unlike/:id", postController.unLikePost);
 
 router.post("/:id/comment", postController.commentPost);
 
-router.post("/:postId/comment/:commentId", postController.commentPost);
+router.put("/:postId/comment/:commentId", postController.editCommentPost);
 
 module.exports = router;
