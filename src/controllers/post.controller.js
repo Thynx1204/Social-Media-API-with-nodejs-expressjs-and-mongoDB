@@ -172,6 +172,35 @@ class PostController {
       }
     }
   }
+
+  async editCommentPost(req, res) {
+    const userId = req.user.id;
+    const postId = req.params.postId;
+    const commentId = req.params.commentId;
+    const newText = req.body.text;
+    const postData = { postId, commentId, newText };
+
+    try {
+      const updatedPost = await postService.editCommentPost(userId, postData);
+      res.status(201).json(jsonResponse(true, "Comment saved successfully", updatedPost));
+    } catch (error) {
+      if (error.message === "Invalid post ID") {
+        res.status(400).json(jsonResponse(false, error.message));
+      } else if (error.message === "Invalid comment ID") {
+        res.status(400).json(jsonResponse(false, error.message));
+      } else if (error.message === "Post not found") {
+        res.status(404).json(jsonResponse(false, error.message));
+      } else if (error.message === "Comment not found") {
+        res.status(404).json(jsonResponse(false, error.message));
+      } else if (
+        error.message === "You are not authorized to edit this comment"
+      ) {
+        res.status(403).json(jsonResponse(false, error.message));
+      } else {
+        res.status(500).json(jsonResponse(false, "An unexpected error occurs"));
+      }
+    }
+  }
 }
 
 module.exports = PostController;
