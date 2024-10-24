@@ -176,38 +176,36 @@ class PostService {
   }
 
   async editCommentPost(userId, postData) {
-    const { postId, text } = postData;
-    const user = await User.findById(userId);
+    const { postId, commentId, newText } = postData;
+  
+    if (!ObjectID.isValid(postId)) throw new Error("Invalid post ID");
 
-    if (!ObjectID.isValid(postId)) {
-      throw new Error("Invalid post ID");
-    }
-
+    if (!ObjectID.isValid(commentId)) throw new Error("Invalid comment ID");
+  
     const post = await Post.findById(postId);
-
-    if (!post) {
-      throw new Error("Post not found");
+  
+    if (!post) throw new Error("Post not found");
+  
+    const comment = post.comments.find(
+      (comment) => comment._id.toString() === commentId
+    );
+    
+    if (!comment) {
+      throw new Error("Comment not found");
     }
-
-    if (post.comments.commenterId !== user.id) {
+    
+    if (comment.commenterId.toString() !== userId) {
       throw new Error("You are not authorized to edit this comment");
     }
-
-    const updatedPost = await Post.findByIdAndUpdate(
-      postId,
-      {
-        $set: {
-          comments: {
-            text,
-            timestamp: new Date().getTime(),
-          },
-        },
-      },
-      { new: true }
-    );
-
-    return updatedPost;
+  
+    comment.text = newText;
+    comment.timestamp = new Date().getTime();
+  
+    await post.save();
+  
+    return post;
   }
+  
 }
 
 module.exports = PostService;
