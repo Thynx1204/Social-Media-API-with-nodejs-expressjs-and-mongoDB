@@ -226,10 +226,14 @@ class PostService {
     }
     
     if (comment.commenterId.toString() !== userId) {
-      throw new Error("You are not authorized to detete this comment");
+      throw new Error("You are not authorized to delete this comment");
     }
   
-    await post.deleteOne();
+    post.comments = post.comments.filter(
+      (comment) => comment._id.toString() !== commentId
+    );
+
+    await post.save();
   
     return post;
   }

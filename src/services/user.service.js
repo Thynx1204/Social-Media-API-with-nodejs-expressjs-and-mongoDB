@@ -1,6 +1,7 @@
 const User = require("../models/user.model");
 const ObjectID = require("mongoose").Types.ObjectId;
-
+const path = require("path");
+require('dotenv').config();
 class UserService {
   async getAllUsers() {
     const users = await User.find().select("-password");
@@ -31,6 +32,30 @@ class UserService {
     const user = await User.findByIdAndUpdate(
       userId,
       { $set: { bio: userBio } },
+      { new: true }
+    ).select("-password");
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    return user;
+  }
+
+  async uploadProfil(userData) {
+    const { userId, picture } = userData;
+
+    const uploadPath = process.env.UPLOADS_PATH || path.join(__dirname, "../uploads");
+
+    const filePath = picture ? path.join(uploadPath, picture.filename) : "";
+
+    if (!ObjectID.isValid(userId)) {
+      throw new Error("Invalid user ID");
+    }
+
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { $set: { picture: filePath } },
       { new: true }
     ).select("-password");
 

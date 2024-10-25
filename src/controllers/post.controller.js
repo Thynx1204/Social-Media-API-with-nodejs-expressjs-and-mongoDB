@@ -210,7 +210,7 @@ class PostController {
 
     try {
       const updatedPost = await postService.deleteCommentPost(userId, postData);
-      res.status(200).json(jsonResponse(true, "Comment edit successfully", updatedPost));
+      res.status(200).json(jsonResponse(true, "Comment delete successfully", updatedPost));
     } catch (error) {
       if (error.message === "Invalid post ID") {
         res.status(400).json(jsonResponse(false, error.message));
