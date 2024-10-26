@@ -1,11 +1,12 @@
 const multer = require("multer");
 const path = require("path");
 const User = require("../models/user.model");
+require('dotenv').config();
 
 
 const profilStorage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "./uploads/profil"); 
+    cb(null, process.env.UPLOADS_PATH); 
   },
   filename: async function (req, file, cb) {
     const user = await User.findById(req.user.id)
@@ -17,7 +18,7 @@ const profilStorage = multer.diskStorage({
 
 const postStorage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "./uploads/posts"); 
+    cb(null, process.env.UPLOADS_POST_PATH); 
   },
   filename: async function (req, file, cb) {
     const user = await User.findById(req.user.id)
