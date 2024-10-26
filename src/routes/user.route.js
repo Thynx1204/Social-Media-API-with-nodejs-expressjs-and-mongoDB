@@ -2,7 +2,7 @@ const UserController = require("../controllers/user.controller");
 const userController = new UserController();
 const router = require("express").Router();
 const { isAdmin } = require("../middlewares/auth.middleware");
-
+const upload = require("../middlewares/multer.middleware");
 
 router.get("/", userController.getAllUsers);
 
@@ -18,5 +18,6 @@ router.patch("/follow", userController.followUser)
 
 router.patch("/unfollow", userController.unFollowUser)
 
+router.post("/upload", upload.single("file"), userController.uploadProfil);
 
 module.exports = router;
