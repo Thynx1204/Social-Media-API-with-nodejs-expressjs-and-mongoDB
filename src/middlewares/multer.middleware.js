@@ -3,15 +3,27 @@ const path = require("path");
 const User = require("../models/user.model");
 
 
-const storage = multer.diskStorage({
+const profilStorage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "../uploads"); 
+    cb(null, "./uploads/profil"); 
   },
   filename: async function (req, file, cb) {
     const user = await User.findById(req.user.id)
-    const uniqueSuffix = user.pseudo.replace(/[^a-zA-Z0-9]/g, "");
-    const ext = path.extname(file.originalname);
-    cb(null, uniqueSuffix + ext);
+    const name = user.pseudo.replace(/[^a-zA-Z0-9]/g, "");
+    const ext = ".jpg";
+    cb(null, name + ext);
+  },
+});
+
+const postStorage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "./uploads/profil"); 
+  },
+  filename: async function (req, file, cb) {
+    const user = await User.findById(req.user.id)
+    const name = `${user._id}-${Date.now()}`;
+    const ext = ".jpg";
+    cb(null, name + ext);
   },
 });
 
@@ -26,10 +38,16 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
-const upload = multer({
-  storage: storage,
+const uploadProfile = multer({
+  storage: profilStorage,
   limits: { fileSize: 1024 * 1024 * 10 },
   fileFilter,
 });
 
-module.exports =  upload;
+const uploadPostPicture = multer({
+  storage: postStorage,
+  limits: { fileSize: 1024 * 1024 * 10 },
+  fileFilter,
+});
+
+module.exports =  { uploadProfile, uploadPostPicture };

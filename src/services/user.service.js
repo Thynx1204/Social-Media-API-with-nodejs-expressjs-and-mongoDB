@@ -45,7 +45,7 @@ class UserService {
   async uploadProfil(userData) {
     const { userId, picture } = userData;
 
-    const uploadPath = process.env.UPLOADS_PATH || path.join(__dirname, "../uploads");
+    const uploadPath = process.env.UPLOADS_PATH;
 
     const filePath = picture ? path.join(uploadPath, picture.filename) : "";
 
