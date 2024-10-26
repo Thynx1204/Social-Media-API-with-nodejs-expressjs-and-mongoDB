@@ -49,19 +49,11 @@ class UserService {
 
     const filePath = picture ? path.join(uploadPath, picture.filename) : "";
 
-    if (!ObjectID.isValid(userId)) {
-      throw new Error("Invalid user ID");
-    }
-
     const user = await User.findByIdAndUpdate(
       userId,
       { $set: { picture: filePath } },
       { new: true }
     ).select("-password");
-
-    if (!user) {
-      throw new Error("User not found");
-    }
 
     return user;
   }

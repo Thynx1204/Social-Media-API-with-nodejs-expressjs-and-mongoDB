@@ -42,6 +42,19 @@ class UserController {
     }
   }
 
+  async uploadProfil(req, res) {
+    const userId = req.user.id;
+    const picture = req.file;
+    console.log(picture)
+    try {
+      const user = await userService.updateUser({ userId, picture });
+
+      res.status(201).json(jsonResponse(true, "Profile picture added successfully", user));
+    } catch (error) {
+      res.status(400).json(jsonResponse(false, error.message));
+    }
+  }
+
   async deleteUser(req, res) {
     const userId = req.params.id;
 

@@ -5,32 +5,29 @@ const User = require("../models/user.model");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "./uploads"); 
+    cb(null, "../uploads"); 
   },
   filename: async function (req, file, cb) {
     const user = await User.findById(req.user.id)
-    const uniqueSuffix = user.pseudo;
+    const uniqueSuffix = user.pseudo.replace(/[^a-zA-Z0-9]/g, "");
     const ext = path.extname(file.originalname);
     cb(null, uniqueSuffix + ext);
   },
 });
 
 const fileFilter = (req, file, cb) => {
-  const allowedFileTypes = /jpg|jpeg|png/;
-  const extname = allowedFileTypes.test(
-    path.extname(file.originalname).toLowerCase()
-  );
-  const mimetype = allowedFileTypes.test(file.mimetype);
+  const filetypes = /.jpg|.jpeg|.png/;
+  const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
 
-  if (extname && mimetype) {
+  if (extname) {
     return cb(null, true);
   } else {
-    cb("Error: Images and PDFs Only!");
+    cb("Error: Images Only!");
   }
 };
 
 const upload = multer({
-  storage,
+  storage: storage,
   limits: { fileSize: 1024 * 1024 * 10 },
   fileFilter,
 });
