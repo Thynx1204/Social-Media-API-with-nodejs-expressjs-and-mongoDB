@@ -17,7 +17,7 @@ const profilStorage = multer.diskStorage({
 
 const postStorage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "./uploads/profil"); 
+    cb(null, "./uploads/posts"); 
   },
   filename: async function (req, file, cb) {
     const user = await User.findById(req.user.id)

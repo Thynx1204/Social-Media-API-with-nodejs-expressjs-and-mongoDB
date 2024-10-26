@@ -1,15 +1,20 @@
 const Post = require("../models/post.model");
 const User = require("../models/user.model");
 const ObjectID = require("mongoose").Types.ObjectId;
+require("dotenv").config()
 
 class PostService {
   async createPost(postData) {
     const { posterId, message, picture, video, likers, comments } = postData;
 
+    const uploadPath = process.env.UPLOADS_POST_PATH;
+
+    const filePath = picture ? path.join(uploadPath, picture.filename) : "";
+
     const post = await Post.create({
       posterId,
       message,
-      picture,
+      picture: filePath,
       video,
       likers,
       comments,
