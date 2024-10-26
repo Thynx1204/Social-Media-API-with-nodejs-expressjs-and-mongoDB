@@ -1,6 +1,7 @@
 const Post = require("../models/post.model");
 const User = require("../models/user.model");
 const ObjectID = require("mongoose").Types.ObjectId;
+const path = require("path");
 require("dotenv").config()
 
 class PostService {
