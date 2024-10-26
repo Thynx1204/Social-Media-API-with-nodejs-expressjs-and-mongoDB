@@ -1,8 +1,9 @@
 const PostController = require("../controllers/post.controller");
 const postController = new PostController();
 const router = require("express").Router();
+const { uploadPostPicture } = require("../middlewares/multer.middleware");
 
-router.post("/", postController.createPost);
+router.post("/", uploadPostPicture.single("file"), postController.createPost);
 
 router.get("/", postController.getAllPosts);
 

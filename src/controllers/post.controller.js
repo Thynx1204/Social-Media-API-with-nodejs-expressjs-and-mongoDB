@@ -13,7 +13,7 @@ class PostController {
 
     const posterId = req.user.id;
     const { message, video } = req.body;
-    const picture = "";
+    const picture = req.file;
     const likers = [];
     const comments = [];
 
